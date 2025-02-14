@@ -20,17 +20,17 @@ class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Giỏ hàng',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.blue.shade700,
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Giỏ hàng',
+      //     style: TextStyle(
+      //       fontWeight: FontWeight.bold,
+      //       color: Colors.white,
+      //     ),
+      //   ),
+      //   backgroundColor: Colors.blue.shade700,
+      //   elevation: 0,
+      // ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

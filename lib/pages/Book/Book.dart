@@ -12,17 +12,18 @@ class _MidState extends State<Book> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Thư Viện Sách',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.blue.shade700,
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Thư Viện Sách',
+      //     style: TextStyle(
+      //       fontWeight: FontWeight.bold,
+      //       color: Colors.white,
+      //     ),
+      //   ),
+      //   backgroundColor: Colors.blue.shade700,
+      //   elevation: 0,
+      //   leading: Container(),
+      // ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
