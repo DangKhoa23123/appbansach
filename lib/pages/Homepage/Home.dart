@@ -15,6 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<dynamic> books = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +101,11 @@ class _HomeState extends State<Home> {
                         ),
                         itemCount: 9,
                         itemBuilder: (context, index) {
-                          return BookItem();
+                          return BookItem(
+                            title: books[index]['title'], // Lấy tiêu đề sách
+                            imageUrl: "http://192.168.99.113:3000" + books[index]['thumbnail'], // Lấy ảnh sách
+                            // Lấy giá sách
+                          );
                         },
                       ),
                     ),

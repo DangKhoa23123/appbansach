@@ -62,11 +62,11 @@ class _BoughtbookState extends State<Boughtbook> {
                     },
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BookDetail(bookName: 'Sách')),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => BookDetail(bookName: 'Sách')),
+                    // );
                   },
                 );
               },

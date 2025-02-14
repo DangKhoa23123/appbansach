@@ -30,7 +30,7 @@ class _RegisterState extends State<Register> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.99.113:5000/auth/register'), // Đổi thành IP nếu test trên thiết bị thật
+        Uri.parse('http://192.168.99.113:3000/auth/register'), // Đổi thành IP nếu test trên thiết bị thật
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "username": _usernameController.text,

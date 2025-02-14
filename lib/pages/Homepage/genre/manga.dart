@@ -9,6 +9,7 @@ class Manga extends StatefulWidget {
 }
 
 class _MangaState extends State<Manga> {
+  List<dynamic> books = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +31,11 @@ class _MangaState extends State<Manga> {
               ),
               itemCount: 9,
               itemBuilder: (context, index) {
-                return BookItem();
+                return BookItem(
+                  title: books[index]['title'], // Lấy tiêu đề sách
+                  imageUrl: books[index]['imageUrl'], // Lấy ảnh sách
+                   // Lấy giá sách
+                );
               },
             ),
              SizedBox(height: 50),

@@ -11,6 +11,7 @@ class Horror extends StatefulWidget {
 }
 
 class _HorrorState extends State<Horror> {
+  List<dynamic> books = [];
   @override
   Widget build(BuildContext context) {
     return GenreBase(
@@ -35,13 +36,17 @@ class _HorrorState extends State<Horror> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  childAspectRatio: 0.7,
+                  childAspectRatio: 0.6,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
                 itemCount: 9,
                 itemBuilder: (context, index) {
-                  return BookItem();
+                  return BookItem(
+                    title: books[index]['title'], // Lấy tiêu đề sách
+                  imageUrl: books[index]['imageUrl'], // Lấy ảnh sách
+                   // Lấy giá sách
+                  );
                 },
               ),
             ),

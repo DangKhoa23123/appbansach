@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.99.113:5000/auth/login');
+    final url = Uri.parse('http://192.168.99.113:3000/auth/login');
     try {
       final response = await http.post(
         url,

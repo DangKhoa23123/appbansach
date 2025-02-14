@@ -10,6 +10,7 @@ class Novel extends StatefulWidget {
 }
 
 class _NovelState extends State<Novel> {
+  List<dynamic> books = [];
   @override
   Widget build(BuildContext context) {
     return GenreBase(
@@ -68,7 +69,11 @@ class _NovelState extends State<Novel> {
                 ),
                 itemCount: 9,
                 itemBuilder: (context, index) {
-                  return BookItem();
+                  return BookItem(
+                    title: books[index]['title'], // Lấy tiêu đề sách
+                  imageUrl: books[index]['imageUrl'], // Lấy ảnh sách
+                   // Lấy giá sách
+                  );
                 },
               ),
             ),

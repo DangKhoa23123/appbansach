@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 List<String> purchasedBooks = [];
 
 class BookDetail extends StatelessWidget {
-  final String bookName;
+  final Map<String, dynamic> book;
 
-  BookDetail({required this.bookName});
+  BookDetail({required this.book});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +13,7 @@ class BookDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Chi Tiết Sách',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.blue.shade700,
         elevation: 0,
@@ -33,7 +30,7 @@ class BookDetail extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Hero image section
+              // Ảnh bìa sách
               Container(
                 width: double.infinity,
                 height: 300,
@@ -48,33 +45,28 @@ class BookDetail extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 200,
-                        height: 280,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 15,
-                              offset: Offset(0, 8),
-                            ),
-                          ],
+                child: Center(
+                  child: Container(
+                    width: 200,
+                    height: 280,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 15,
+                          offset: Offset(0, 8),
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            'assets/Harry Potter và Hòn đá Phù thủy.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
-                  ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: book['thumbnail'] != null
+                          ? Image.network('http://192.168.99.113:3000'+ book['thumbnail'], fit: BoxFit.cover)
+                          : Image.asset('assets/default_book.png', fit: BoxFit.cover),
+                    ),
+                  ),
                 ),
               ),
 
@@ -83,33 +75,19 @@ class BookDetail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title and Author section
+                    // Tiêu đề và tác giả
                     Text(
-                      'Harry Potter và Hòn đá Phù thủy',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900,
-                      ),
+                      book['title'],
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue.shade900),
                     ),
                     SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(Icons.person,
-                            color: Colors.blue.shade700, size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          'J.K. Rowling',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey.shade700,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Tác giả: ${book['author']}',
+                      style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
                     ),
 
                     SizedBox(height: 16),
-                    // Rating and Info section
+                    // Đánh giá & lượt xem & số trang
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -129,133 +107,67 @@ class BookDetail extends StatelessWidget {
                           Column(
                             children: [
                               Icon(Icons.star, color: Colors.amber),
-                              Text('4.8/5.0'),
-                              Text('Đánh giá',
-                                  style: TextStyle(color: Colors.grey)),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Icon(Icons.remove_red_eye, color: Colors.blue),
-                              Text('10K+'),
-                              Text('Lượt xem',
-                                  style: TextStyle(color: Colors.grey)),
+                              Text('${book['rating'] ?? '4.5'}/5.0'),
+                              Text('Đánh giá', style: TextStyle(color: Colors.grey)),
                             ],
                           ),
                           Column(
                             children: [
                               Icon(Icons.book, color: Colors.green),
-                              Text('320'),
-                              Text('Trang',
-                                  style: TextStyle(color: Colors.grey)),
+                              Text('${book['pageCount'] ?? '320'}'),
+                              Text('Trang', style: TextStyle(color: Colors.grey)),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 24),
-                    // Description section
-                    Text(
-                      'Mô tả sách',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900,
-                      ),
-                    ),
-                    SizedBox(height: 12),
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        'Khi một lá thư được gởi đến cho cậu bé Harry Potter bình thường và bất hạnh, cậu khám phá ra một bí mật đã được che giấu suốt cả một thập kỉ...',
-                        style: TextStyle(
-                          fontSize: 16,
-                          height: 1.5,
-                          color: Colors.grey.shade800,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 24),
-                    // Price and Buy section
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Giá',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              Text(
-                                '200.000đ',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue.shade900,
-                                ),
-                              ),
+                              Icon(Icons.inventory, color: Colors.red),
+                              Text('${book['quality'] ?? 'N/A'}'),
+                              Text('Số lượng', style: TextStyle(color: Colors.grey)),
                             ],
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              purchasedBooks.add(bookName);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      '$bookName đã được thêm vào giỏ hàng!'),
-                                  duration: Duration(milliseconds: 500),
-                                  backgroundColor: Colors.green,
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue.shade700,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 32, vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: Text(
-                              'Mua Sách',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
                           ),
                         ],
                       ),
+                    ),
+
+                    SizedBox(height: 24),
+                    // Mô tả sách
+                    Text('Mô tả sách', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
+                    SizedBox(height: 12),
+                    Text(book['description'] ?? 'Không có mô tả.', style: TextStyle(fontSize: 16, height: 1.5, color: Colors.grey.shade800)),
+
+                    SizedBox(height: 24),
+                    // Giá và nút Mua
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Giá', style: TextStyle(color: Colors.grey)),
+                            Text('${book['price'] ?? '200.000'}đ',
+                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            purchasedBooks.add(book['title']);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('${book['title']} đã được thêm vào giỏ hàng!'),
+                                duration: Duration(seconds: 1),
+                                backgroundColor: Colors.green,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade700,
+                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: Text('Mua Sách', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        ),
+                      ],
                     ),
                   ],
                 ),

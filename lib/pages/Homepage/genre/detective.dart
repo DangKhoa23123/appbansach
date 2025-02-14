@@ -10,6 +10,7 @@ class Detective extends StatefulWidget {
 }
 
 class _DetectiveState extends State<Detective> {
+  List<dynamic> books = [];
   @override
   Widget build(BuildContext context) {
     return GenreBase(
@@ -67,7 +68,11 @@ class _DetectiveState extends State<Detective> {
                 ),
                 itemCount: 9,
                 itemBuilder: (context, index) {
-                  return BookItem();
+                  return BookItem(
+                    title: books[index]['title'], // Lấy tiêu đề sách
+                  imageUrl: books[index]['imageUrl'], // Lấy ảnh sách
+                  // Lấy giá sách
+                  );
                 },
               ),
             ),
