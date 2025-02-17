@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ungdungthuetro/api_config.dart';
 import 'dart:convert';
 import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
 
@@ -21,7 +22,7 @@ class _BookState extends State<Book> {
   }
 
   Future<void> fetchBooks() async {
-    final String apiUrl = 'http://192.168.99.113:3000/api/books';
+    final String apiUrl = '${ApiConfig.baseUrl}/api/books';
     try {
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
@@ -86,7 +87,7 @@ class _BookState extends State<Book> {
                                 ),
                                 child: book['thumbnail'] != null
                                     ? Image.network(
-                                        'http://192.168.99.113:3000${book['thumbnail']}',
+                                        '${ApiConfig.baseUrl}${book['thumbnail']}',
                                         fit: BoxFit.cover,
                                       )
                                     : Icon(Icons.book, size: 40, color: Colors.blue.shade700),

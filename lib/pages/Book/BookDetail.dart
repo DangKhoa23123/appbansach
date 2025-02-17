@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ungdungthuetro/api_config.dart';
 
 List<String> purchasedBooks = [];
 
@@ -63,7 +64,7 @@ class BookDetail extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: book['thumbnail'] != null
-                          ? Image.network('http://192.168.99.113:3000'+ book['thumbnail'], fit: BoxFit.cover)
+                          ? Image.network('${ApiConfig.baseUrl}'+ book['thumbnail'], fit: BoxFit.cover)
                           : Image.asset('assets/default_book.png', fit: BoxFit.cover),
                     ),
                   ),

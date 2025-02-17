@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ungdungthuetro/api_config.dart';
 import 'login.dart'; // Import màn hình đăng nhập
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -30,7 +31,7 @@ class _RegisterState extends State<Register> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.99.113:3000/auth/register'), // Đổi thành IP nếu test trên thiết bị thật
+        Uri.parse('${ApiConfig.baseUrl}/auth/register'), // Đổi thành IP nếu test trên thiết bị thật
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "username": _usernameController.text,

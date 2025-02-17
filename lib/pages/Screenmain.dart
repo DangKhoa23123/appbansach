@@ -3,6 +3,7 @@ import 'package:ungdungthuetro/pages/Homepage/Home.dart';
 import 'package:ungdungthuetro/pages/Book/Book.dart';
 import 'package:ungdungthuetro/pages/Payment/Payment.dart';
 import 'package:ungdungthuetro/pages/Profile/Profile.dart';
+import 'package:ungdungthuetro/pages/SearchScreen.dart';
 
 class Mainscreen extends StatefulWidget {
   const Mainscreen({
@@ -72,7 +73,10 @@ class _MainscreenState extends State<Mainscreen> {
                 color: Colors.white,
               ),
               onPressed: () {
-                // Xử lý tìm kiếm
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchScreen()),
+                );
               },
             ),
           ),

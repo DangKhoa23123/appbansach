@@ -13,7 +13,7 @@ class BookItem extends StatelessWidget {
       children: [
         Expanded( // 📌 Sửa đổi ở đây để ảnh không tràn ra ngoài
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
             child: Image.network(
               imageUrl,
               fit: BoxFit.cover,

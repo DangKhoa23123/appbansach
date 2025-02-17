@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ungdungthuetro/Login%20and%20Register/Register.dart';
+import 'package:ungdungthuetro/api_config.dart';
 import 'package:ungdungthuetro/pages/Screenmain.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,7 +34,7 @@ class _LoginState extends State<Login> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.99.113:3000/auth/login');
+    final url = Uri.parse('${ApiConfig.baseUrl}/auth/login');
     try {
       final response = await http.post(
         url,

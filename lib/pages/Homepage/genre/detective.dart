@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ungdungthuetro/api_config.dart';
+import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
 import 'package:ungdungthuetro/pages/Homepage/Bookitem.dart';
 import 'package:ungdungthuetro/pages/Homepage/genre/GenreBase.dart';
+import 'package:http/http.dart' as http;
+
 
 class Detective extends StatefulWidget {
   const Detective({super.key});
@@ -11,96 +17,80 @@ class Detective extends StatefulWidget {
 
 class _DetectiveState extends State<Detective> {
   List<dynamic> books = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBooks(); // Gọi API khi màn hình khởi tạo
+  }
+
+  Future<void> fetchBooks() async {
+    final url = Uri.parse("${ApiConfig.baseUrl}/books/Trinh thám"); // API của bạn
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          books = json.decode(response.body); // Lưu danh sách sách vào state
+        });
+      } else {
+        print("Lỗi khi lấy dữ liệu: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Lỗi kết nối API: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GenreBase(
-      title: 'Trinh thám',
+      title: ' Trinh thám',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Sách Trinh Thám',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade900,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Khám phá những câu chuyện trinh thám hấp dẫn',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            height: 40,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildFilterChip('Mới nhất'),
-                _buildFilterChip('Phổ biến'),
-                _buildFilterChip('Đánh giá cao'),
-                _buildFilterChip('Giá thấp đến cao'),
-              ],
-            ),
-          ),
-          SizedBox(height: 16),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 0.7,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: 9,
-                itemBuilder: (context, index) {
-                  return BookItem(
-                    title: books[index]['title'], // Lấy tiêu đề sách
-                  imageUrl: books[index]['imageUrl'], // Lấy ảnh sách
-                  // Lấy giá sách
-                  );
-                },
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Tất cả sách trinh thám',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue.shade900,
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilterChip(String label) {
-    return Container(
-      margin: EdgeInsets.only(right: 8),
-      child: FilterChip(
-        label: Text(
-          label,
-          style: TextStyle(
-            color: Colors.blue.shade700,
-            fontSize: 12,
+          Expanded( // Sửa lỗi body ở đây
+            child: books.isEmpty
+                ? const Center(child: CircularProgressIndicator()) // Hiển thị loading khi chưa có dữ liệu
+                : GridView.builder(
+                    padding: const EdgeInsets.all(8),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 0.6,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: books.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          // Điều hướng đến trang chi tiết sách
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookDetail(book: books[index]),
+                            ),
+                          );
+                        },
+                        child: BookItem(
+                          title: books[index]['title'], // Tiêu đề sách
+                          imageUrl: "${ApiConfig.baseUrl}" + books[index]['thumbnail'], // Ảnh sách
+                          // price: books[index]['price'].toString(), // Giá sách
+                        ),
+                      );
+                    },
+                  ),
           ),
-        ),
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.blue.shade200),
-        ),
-        onSelected: (bool selected) {
-          // Xử lý lọc sách
-        },
+        ],
       ),
     );
   }

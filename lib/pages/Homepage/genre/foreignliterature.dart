@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ungdungthuetro/api_config.dart';
+import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
 import 'dart:convert';
 import 'package:ungdungthuetro/pages/Homepage/Bookitem.dart';
 import 'package:ungdungthuetro/pages/Homepage/genre/GenreBase.dart';
+
 
 class Foreignliterature extends StatefulWidget {
   const Foreignliterature({super.key});
@@ -21,7 +24,7 @@ class _ForeignliteratureState extends State<Foreignliterature> {
   }
 
   Future<void> fetchBooks() async {
-    final url = Uri.parse("http://192.168.99.113:3000/books/foreign-literature"); // API của bạn
+    final url = Uri.parse("${ApiConfig.baseUrl}/books/Văn học nước ngoài"); // API của bạn
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -67,10 +70,21 @@ class _ForeignliteratureState extends State<Foreignliterature> {
                     ),
                     itemCount: books.length,
                     itemBuilder: (context, index) {
-                      return BookItem(
-                        title: books[index]['title'], // Tiêu đề sách
-                        imageUrl: "http://192.168.99.113:3000" + books[index]['thumbnail'], // Ảnh sách
-                        // price: books[index]['price'].toString(), // Giá sách
+                      return GestureDetector(
+                        onTap: () {
+                          // Điều hướng đến trang chi tiết sách
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookDetail(book: books[index]),
+                            ),
+                          );
+                        },
+                        child: BookItem(
+                          title: books[index]['title'], // Tiêu đề sách
+                          imageUrl: "${ApiConfig.baseUrl}" + books[index]['thumbnail'], // Ảnh sách
+                          // price: books[index]['price'].toString(), // Giá sách
+                        ),
                       );
                     },
                   ),
