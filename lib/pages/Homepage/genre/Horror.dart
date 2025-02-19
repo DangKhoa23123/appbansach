@@ -24,7 +24,7 @@ class _HorrorState extends State<Horror> {
   }
 
   Future<void> fetchBooks() async {
-    final url = Uri.parse("${ApiConfig.baseUrl}/books/Kinh dị"); // API của bạn
+    final url = Uri.parse("${ApiConfig.baseUrl}/genres/Kinh%20dị"); // API của bạn
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {

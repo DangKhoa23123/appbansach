@@ -111,14 +111,14 @@ class _ProfileState extends State<Profile> {
               child: ListView(
                 padding: EdgeInsets.all(16),
                 children: [
-                  _buildMenuCard(
-                    icon: Icons.post_add,
-                    title: 'Sách đã mua',
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Boughtbook()),
-                    ),
-                  ),
+                  // _buildMenuCard(
+                  //   icon: Icons.post_add,
+                  //   title: 'Sách đã mua',
+                  //   onTap: () => Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => Boughtbook()),
+                  //   ),
+                  // ),
                   _buildMenuCard(
                     icon: Icons.favorite,
                     title: 'Sách yêu thích',

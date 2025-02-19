@@ -25,7 +25,7 @@ class _DetectiveState extends State<Detective> {
   }
 
   Future<void> fetchBooks() async {
-    final url = Uri.parse("${ApiConfig.baseUrl}/books/Trinh thám"); // API của bạn
+    final url = Uri.parse("${ApiConfig.baseUrl}/genres/Trinh%20thám"); // API của bạn
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {

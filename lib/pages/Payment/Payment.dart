@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ungdungthuetro/api_config.dart'; // Đảm bảo import API config
 import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
 
 class Payment extends StatefulWidget {
@@ -20,17 +21,6 @@ class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Giỏ hàng',
-      //     style: TextStyle(
-      //       fontWeight: FontWeight.bold,
-      //       color: Colors.white,
-      //     ),
-      //   ),
-      //   backgroundColor: Colors.blue.shade700,
-      //   elevation: 0,
-      // ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -44,11 +34,8 @@ class _PaymentState extends State<Payment> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.shopping_cart_outlined,
-                      size: 100,
-                      color: Colors.grey.shade400,
-                    ),
+                    Icon(Icons.shopping_cart_outlined,
+                        size: 100, color: Colors.grey.shade400),
                     SizedBox(height: 16),
                     Text(
                       'Giỏ hàng trống',
@@ -56,13 +43,6 @@ class _PaymentState extends State<Payment> {
                         fontSize: 20,
                         color: Colors.grey.shade700,
                         fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Hãy thêm sách vào giỏ hàng của bạn',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
                       ),
                     ),
                   ],
@@ -74,11 +54,11 @@ class _PaymentState extends State<Payment> {
                     padding: EdgeInsets.only(bottom: 100),
                     itemCount: purchasedBooks.length,
                     itemBuilder: (context, index) {
+                      var book = purchasedBooks[index];
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
+                            horizontal: 16, vertical: 8),
                         child: Card(
                           elevation: 2,
                           shape: RoundedRectangleBorder(
@@ -103,34 +83,34 @@ class _PaymentState extends State<Payment> {
                                   height: 70,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    color: Colors.blue.shade50,
+                                    color: Colors.white,
                                   ),
-                                  child: Icon(
-                                    Icons.book,
-                                    color: Colors.blue.shade300,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: book['thumbnail'] != null
+                                        ? Image.network(
+                                            '${ApiConfig.baseUrl}${book['thumbnail']}',
+                                            fit: BoxFit.cover)
+                                        : Image.asset(
+                                            'assets/default_book.png',
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                               ],
                             ),
                             title: Text(
-                              purchasedBooks[index],
+                              book['title'],
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue.shade900,
                               ),
                             ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 4),
-                                Text(
-                                  '200.000đ',
-                                  style: TextStyle(
-                                    color: Colors.blue.shade700,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                            subtitle: Text(
+                              '${book['price'] ?? '0'}đ',
+                              style: TextStyle(
+                                color: Colors.blue.shade700,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             trailing: IconButton(
                               icon: Icon(Icons.delete,
@@ -141,16 +121,15 @@ class _PaymentState extends State<Payment> {
                                   builder: (context) => AlertDialog(
                                     title: Text('Xóa sách'),
                                     content: Text(
-                                      'Bạn có chắc chắn muốn xóa "${purchasedBooks[index]}" khỏi giỏ hàng?',
+                                      'Bạn có chắc muốn xóa "${book['title']}" khỏi giỏ hàng?',
                                     ),
                                     actions: [
                                       TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                          'Hủy',
-                                          style: TextStyle(
-                                              color: Colors.grey.shade700),
-                                        ),
+                                        onPressed: () =>
+                                            Navigator.pop(context),
+                                        child: Text('Hủy',
+                                            style: TextStyle(
+                                                color: Colors.grey.shade700)),
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
@@ -201,12 +180,11 @@ class _PaymentState extends State<Payment> {
                                 children: [
                                   Text(
                                     'Tổng tiền',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade600,
-                                    ),
+                                    style:
+                                        TextStyle(color: Colors.grey.shade600),
                                   ),
                                   Text(
-                                    '${_checkedItems.where((item) => item).length * 200000}đ',
+                                    '${_calculateTotalPrice()}đ',
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -270,5 +248,15 @@ class _PaymentState extends State<Payment> {
               ),
       ),
     );
+  }
+
+  int _calculateTotalPrice() {
+    int total = 0;
+    for (int i = 0; i < purchasedBooks.length; i++) {
+      if (_checkedItems[i]) {
+        total += int.tryParse(purchasedBooks[i]['price'].toString()) ?? 0;
+      }
+    }
+    return total;
   }
 }

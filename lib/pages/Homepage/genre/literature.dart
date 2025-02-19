@@ -25,7 +25,7 @@ class _LiteratureState extends State<Literature> {
   }
 
   Future<void> fetchBooks() async {
-    final url = Uri.parse("${ApiConfig.baseUrl}/books/Văn học"); // API của bạn
+    final url = Uri.parse("${ApiConfig.baseUrl}/genres/Văn%20học"); // API của bạn
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {

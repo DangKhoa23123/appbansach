@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ungdungthuetro/api_config.dart';
 
-List<String> purchasedBooks = [];
+List<Map<String, dynamic>> purchasedBooks = [];
 
 class BookDetail extends StatelessWidget {
   final Map<String, dynamic> book;
@@ -64,8 +64,11 @@ class BookDetail extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: book['thumbnail'] != null
-                          ? Image.network('${ApiConfig.baseUrl}'+ book['thumbnail'], fit: BoxFit.cover)
-                          : Image.asset('assets/default_book.png', fit: BoxFit.cover),
+                          ? Image.network(
+                              '${ApiConfig.baseUrl}' + book['thumbnail'],
+                              fit: BoxFit.cover)
+                          : Image.asset('assets/default_book.png',
+                              fit: BoxFit.cover),
                     ),
                   ),
                 ),
@@ -79,12 +82,16 @@ class BookDetail extends StatelessWidget {
                     // Tiêu đề và tác giả
                     Text(
                       book['title'],
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue.shade900),
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue.shade900),
                     ),
                     SizedBox(height: 8),
                     Text(
                       'Tác giả: ${book['author']}',
-                      style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                      style:
+                          TextStyle(fontSize: 16, color: Colors.grey.shade700),
                     ),
 
                     SizedBox(height: 16),
@@ -109,21 +116,24 @@ class BookDetail extends StatelessWidget {
                             children: [
                               Icon(Icons.star, color: Colors.amber),
                               Text('${book['rating'] ?? '4.5'}/5.0'),
-                              Text('Đánh giá', style: TextStyle(color: Colors.grey)),
+                              Text('Đánh giá',
+                                  style: TextStyle(color: Colors.grey)),
                             ],
                           ),
                           Column(
                             children: [
                               Icon(Icons.book, color: Colors.green),
                               Text('${book['pageCount'] ?? '320'}'),
-                              Text('Trang', style: TextStyle(color: Colors.grey)),
+                              Text('Trang',
+                                  style: TextStyle(color: Colors.grey)),
                             ],
                           ),
                           Column(
                             children: [
                               Icon(Icons.inventory, color: Colors.red),
                               Text('${book['quality'] ?? 'N/A'}'),
-                              Text('Số lượng', style: TextStyle(color: Colors.grey)),
+                              Text('Số lượng',
+                                  style: TextStyle(color: Colors.grey)),
                             ],
                           ),
                         ],
@@ -132,9 +142,17 @@ class BookDetail extends StatelessWidget {
 
                     SizedBox(height: 24),
                     // Mô tả sách
-                    Text('Mô tả sách', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
+                    Text('Mô tả sách',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue.shade900)),
                     SizedBox(height: 12),
-                    Text(book['description'] ?? 'Không có mô tả.', style: TextStyle(fontSize: 16, height: 1.5, color: Colors.grey.shade800)),
+                    Text(book['description'] ?? 'Không có mô tả.',
+                        style: TextStyle(
+                            fontSize: 16,
+                            height: 1.5,
+                            color: Colors.grey.shade800)),
 
                     SizedBox(height: 24),
                     // Giá và nút Mua
@@ -146,15 +164,20 @@ class BookDetail extends StatelessWidget {
                           children: [
                             Text('Giá', style: TextStyle(color: Colors.grey)),
                             Text('${book['price'] ?? '200.000'}đ',
-                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue.shade900)),
                           ],
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            purchasedBooks.add(book['title']);
+                            purchasedBooks.add(
+                                book); // Thêm sách vào danh sách thay vì gán lại
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('${book['title']} đã được thêm vào giỏ hàng!'),
+                                content: Text(
+                                    '${book['title']} đã được thêm vào giỏ hàng!'),
                                 duration: Duration(seconds: 1),
                                 backgroundColor: Colors.green,
                                 behavior: SnackBarBehavior.floating,
@@ -163,10 +186,14 @@ class BookDetail extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue.shade700,
-                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 32, vertical: 16),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
-                          child: Text('Mua Sách', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: Text('Mua Sách',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),

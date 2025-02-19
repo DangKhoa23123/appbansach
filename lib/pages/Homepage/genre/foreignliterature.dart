@@ -24,7 +24,7 @@ class _ForeignliteratureState extends State<Foreignliterature> {
   }
 
   Future<void> fetchBooks() async {
-    final url = Uri.parse("${ApiConfig.baseUrl}/books/Văn học nước ngoài"); // API của bạn
+    final url = Uri.parse("${ApiConfig.baseUrl}/genres/Văn%20học%20nước%20ngoài"); // API của bạn
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
