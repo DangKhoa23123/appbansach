@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ungdungthuetro/api_config.dart';
-
-List<Map<String, dynamic>> purchasedBooks = [];
+import 'package:ungdungthuetro/global.dart';
 
 class BookDetail extends StatelessWidget {
   final Map<String, dynamic> book;
@@ -172,8 +171,7 @@ class BookDetail extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            purchasedBooks.add(
-                                book); // Thêm sách vào danh sách thay vì gán lại
+                            purchasedBooks.add(book); // Thêm sách vào danh sách thay vì gán lại
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(

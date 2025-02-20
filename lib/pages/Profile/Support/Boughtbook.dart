@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ungdungthuetro/api_config.dart';
-import 'package:ungdungthuetro/global.dart'; // Import danh sách lịch sử mua hàng
-
+import 'package:ungdungthuetro/global.dart';
 class Boughtbook extends StatelessWidget {
   const Boughtbook({super.key});
 

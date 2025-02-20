@@ -1,7 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ungdungthuetro/api_config.dart';
-import 'package:ungdungthuetro/global.dart'; // Import biến toàn cục
-import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
+import 'package:ungdungthuetro/global.dart';  // Giữ nguyên import này
+import 'package:http/http.dart' as http;
 
 class Payment extends StatefulWidget {
   const Payment({super.key});
@@ -16,6 +17,7 @@ class _PaymentState extends State<Payment> {
   @override
   void initState() {
     super.initState();
+    // Sử dụng globals. để truy cập biến
     _checkedItems = List.generate(purchasedBooks.length, (index) => false);
   }
 
@@ -30,6 +32,7 @@ class _PaymentState extends State<Payment> {
             colors: [Colors.blue.shade100, Colors.white],
           ),
         ),
+        // Kiểm tra purchasedBooks qua globals
         child: purchasedBooks.isEmpty
             ? Center(
                 child: Column(
@@ -37,12 +40,12 @@ class _PaymentState extends State<Payment> {
                   children: [
                     Icon(Icons.shopping_cart_outlined,
                         size: 100, color: Colors.grey.shade400),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Giỏ hàng trống',
                       style: TextStyle(
                         fontSize: 20,
-                        color: Colors.grey.shade700,
+                        color: Colors.grey,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -52,11 +55,12 @@ class _PaymentState extends State<Payment> {
             : Stack(
                 children: [
                   ListView.builder(
-                    padding: EdgeInsets.only(bottom: 100),
+                    padding: const EdgeInsets.only(bottom: 100),
+                    // Sử dụng globals.purchasedBooks
                     itemCount: purchasedBooks.length,
                     itemBuilder: (context, index) {
+                      // Lấy book từ globals.purchasedBooks
                       var book = purchasedBooks[index];
-
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
@@ -66,7 +70,7 @@ class _PaymentState extends State<Payment> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: ListTile(
-                            contentPadding: EdgeInsets.all(12),
+                            contentPadding: const EdgeInsets.all(12),
                             leading: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -91,10 +95,12 @@ class _PaymentState extends State<Payment> {
                                     child: book['thumbnail'] != null
                                         ? Image.network(
                                             '${ApiConfig.baseUrl}${book['thumbnail']}',
-                                            fit: BoxFit.cover)
+                                            fit: BoxFit.cover,
+                                          )
                                         : Image.asset(
                                             'assets/default_book.png',
-                                            fit: BoxFit.cover),
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
                                 ),
                               ],
@@ -118,19 +124,20 @@ class _PaymentState extends State<Payment> {
                       );
                     },
                   ),
+                  // Bottom payment section
                   Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
                     child: Container(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 10,
-                            offset: Offset(0, -5),
+                            offset: const Offset(0, -5),
                           ),
                         ],
                       ),
@@ -144,8 +151,9 @@ class _PaymentState extends State<Payment> {
                                 children: [
                                   Text(
                                     'Tổng tiền',
-                                    style:
-                                        TextStyle(color: Colors.grey.shade600),
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                    ),
                                   ),
                                   Text(
                                     '${_calculateTotalPrice()}đ',
@@ -162,7 +170,7 @@ class _PaymentState extends State<Payment> {
                               onPressed: _processPayment,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue.shade700,
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 32,
                                   vertical: 16,
                                 ),
@@ -170,7 +178,7 @@ class _PaymentState extends State<Payment> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              child: Text(
+                              child: const Text(
                                 'Thanh toán',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -189,43 +197,6 @@ class _PaymentState extends State<Payment> {
     );
   }
 
-  void _processPayment() {
-    List<Map<String, dynamic>> selectedBooks = [];
-
-    for (int i = 0; i < purchasedBooks.length; i++) {
-      if (_checkedItems[i]) {
-        selectedBooks.add(purchasedBooks[i]);
-      }
-    }
-
-    if (selectedBooks.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Vui lòng chọn ít nhất một sách để thanh toán!'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      return;
-    }
-
-    setState(() {
-      // Lưu vào lịch sử mua hàng
-      boughtBooksHistory.addAll(selectedBooks);
-
-      // Xóa những sách đã mua khỏi giỏ hàng
-      purchasedBooks.removeWhere((book) => selectedBooks.contains(book));
-      _checkedItems = List.generate(purchasedBooks.length, (index) => false);
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Thanh toán thành công!'),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
   int _calculateTotalPrice() {
     int total = 0;
     for (int i = 0; i < purchasedBooks.length; i++) {
@@ -234,5 +205,75 @@ class _PaymentState extends State<Payment> {
       }
     }
     return total;
+  }
+
+  Future<void> _processPayment() async {
+    List<Map<String, dynamic>> selectedBooks = [];
+    List<String> selectedBookIds = [];
+    for (int i = 0; i < purchasedBooks.length; i++) {
+      if (_checkedItems[i]) {
+        selectedBooks.add(purchasedBooks[i]);
+        selectedBookIds.add(purchasedBooks[i]['id'].toString());
+      }
+    }
+
+    if (selectedBookIds.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Vui lòng chọn ít nhất một sách để thanh toán!'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    final url = Uri.parse("${ApiConfig.baseUrl}/api/payment");
+
+    final body = jsonEncode({
+      "username": globalUserName,
+      "bookIds": selectedBookIds,
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: body,
+      );
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Đơn hàng đã được tạo thành công!'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        // Cập nhật history qua globals
+        boughtBooksHistory.addAll(selectedBooks);
+        
+        setState(() {
+          final selectedSet = Set<String>.from(selectedBookIds);
+          purchasedBooks.removeWhere((book) => selectedSet.contains(book['id']));
+          _checkedItems = List.generate(purchasedBooks.length, (index) => false);
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tạo đơn hàng thất bại!'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error processing payment: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Lỗi kết nối đến server!'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 }
