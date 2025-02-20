@@ -21,7 +21,9 @@ class _SearchScreenState extends State<SearchScreen> {
       isLoading = true;
     });
 
-    final url = Uri.parse("${ApiConfig.baseUrl}/books/search/$query");
+    // Sử dụng query parameter "title" cho API của bạn
+    final url = Uri.parse("${ApiConfig.baseUrl}/search?q=$query");
+    
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -58,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Hiển thị vòng loading
+          ? Center(child: CircularProgressIndicator())
           : searchResults.isEmpty
               ? Center(child: Text("Nhập từ khóa để tìm sách"))
               : GridView.builder(

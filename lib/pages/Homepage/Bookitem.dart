@@ -23,7 +23,7 @@ class BookItem extends StatelessWidget {
         ),
         const SizedBox(height: 4), // Tạo khoảng cách nhỏ
         SizedBox(
-          height: 40, // 📌 Giới hạn chiều cao của tiêu đề để tránh tràn
+          height: 10, // 📌 Giới hạn chiều cao của tiêu đề để tránh tràn
           child: Text(
             title,
             maxLines: 2,
@@ -31,7 +31,7 @@ class BookItem extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 10,
             ),
           ),
         ),

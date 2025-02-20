@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ungdungthuetro/api_config.dart';
 import 'package:ungdungthuetro/pages/Homepage/Bookitem.dart';
 import 'package:ungdungthuetro/pages/Homepage/genre/Horror.dart';
 import 'package:ungdungthuetro/pages/Homepage/genre/Detective.dart';
@@ -103,8 +104,7 @@ class _HomeState extends State<Home> {
                         itemBuilder: (context, index) {
                           return BookItem(
                             title: books[index]['title'], // Lấy tiêu đề sách
-                            imageUrl: "http://192.168.99.113:3000" + books[index]['thumbnail'], // Lấy ảnh sách
-                            // Lấy giá sách
+                            imageUrl: "${ApiConfig.baseUrl}" + books[index]['thumbnail'], // Lấy ảnh sách
                           );
                         },
                       ),

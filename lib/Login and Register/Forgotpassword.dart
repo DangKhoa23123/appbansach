@@ -1,34 +1,35 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:ungdungthuetro/Login%20and%20Register/Forgotpassword.dart';
+import 'package:ungdungthuetro/Login%20and%20Register/Login.dart';
 import 'package:ungdungthuetro/Login%20and%20Register/Register.dart';
 import 'package:ungdungthuetro/api_config.dart';
 import 'package:ungdungthuetro/pages/Screenmain.dart';
 import 'package:http/http.dart' as http;
 
-class Login extends StatefulWidget {
+class Forgotpassword extends StatefulWidget {
   final String? username;
-  final String? password;
+  final String? gmail;
 
-  const Login({super.key, this.username, this.password});
+  const Forgotpassword({super.key, this.username, this.gmail});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Forgotpassword> createState() => _ForgotpasswordState();
 }
 
-class _LoginState extends State<Login> {
+class _ForgotpasswordState extends State<Forgotpassword> {
+  
   late TextEditingController _usernameController;
-  late TextEditingController _passwordController;
+  late TextEditingController _gmailController;
 
   @override
   void initState() {
     super.initState();
     _usernameController = TextEditingController(text: widget.username ?? "");
-    _passwordController = TextEditingController(text: widget.password ?? "");
+    _gmailController = TextEditingController(text: widget.gmail ?? "");
   }
 
   Future<void> _login() async {
-    if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+    if (_usernameController.text.isEmpty || _gmailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Vui lòng nhập đầy đủ thông tin!"), backgroundColor: Colors.red),
       );
@@ -42,7 +43,7 @@ class _LoginState extends State<Login> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': _usernameController.text,
-          'password': _passwordController.text,
+          'gmail': _gmailController.text,
         }),
       );
 
@@ -84,22 +85,18 @@ class _LoginState extends State<Login> {
             ),
             SizedBox(height: 20),
             TextField(
-              controller: _passwordController,
+              controller: _gmailController,
               obscureText: true,
-              decoration: InputDecoration(labelText: "Mật khẩu"),
+              decoration: InputDecoration(labelText: "Gmail đã đăng ký"),
             ),
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: _login,
+              child: Text("Khôi phục tài khoản"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Login())),
               child: Text("Đăng nhập"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Register())),
-              child: Text("Đăng ký"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Forgotpassword())),
-              child: Text("Quên mật khẩu"),
             ),
           ],
         ),

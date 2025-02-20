@@ -1,45 +1,40 @@
-// import 'package:flutter/material.dart';
-// import 'package:ungdungthuetro/api_config.dart';
-// import 'package:ungdungthuetro/pages/Payment/Payment.dart';
-//  // Import danh sách sách đã mua
+import 'package:flutter/material.dart';
+import 'package:ungdungthuetro/api_config.dart';
+import 'package:ungdungthuetro/global.dart'; // Import danh sách lịch sử mua hàng
 
-// class Boughtbook extends StatefulWidget {
-//   const Boughtbook({super.key});
+class Boughtbook extends StatelessWidget {
+  const Boughtbook({super.key});
 
-//   @override
-//   State<Boughtbook> createState() => _BoughtbookState();
-// }
-
-// class _BoughtbookState extends State<Boughtbook> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.green,
-//         title: Text('Sách đã mua'),
-//       ),
-//       body: boughtBooks.isEmpty
-//           ? Center(child: Text('Bạn chưa mua sách nào.'))
-//           : ListView.builder(
-//               itemCount: boughtBooks.length,
-//               itemBuilder: (context, index) {
-//                 var book = boughtBooks[index];
-
-//                 return ListTile(
-//                   leading: Image.network('${ApiConfig.baseUrl}${book['thumbnail']}'),
-//                   title: Text(book['title']),
-//                   subtitle: Text('${book['price']}đ'),
-//                   trailing: IconButton(
-//                     icon: Icon(Icons.delete, color: Colors.red),
-//                     onPressed: () {
-//                       setState(() {
-//                         boughtBooks.removeAt(index);
-//                       });
-//                     },
-//                   ),
-//                 );
-//               },
-//             ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Lịch Sử Mua Hàng'),
+        backgroundColor: Colors.blue.shade700,
+      ),
+      body: boughtBooksHistory.isEmpty
+          ? Center(
+              child: Text(
+                'Chưa có sách nào được mua!',
+                style: TextStyle(fontSize: 18, color: Colors.grey.shade700),
+              ),
+            )
+          : ListView.builder(
+              itemCount: boughtBooksHistory.length,
+              itemBuilder: (context, index) {
+                var book = boughtBooksHistory[index];
+                return ListTile(
+                  leading: Image.network(
+                    '${ApiConfig.baseUrl}${book['thumbnail']}',
+                    width: 50,
+                    height: 70,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Text(book['title']),
+                  subtitle: Text('${book['price']}đ'),
+                );
+              },
+            ),
+    );
+  }
+}

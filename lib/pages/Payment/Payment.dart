@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ungdungthuetro/api_config.dart'; // Đảm bảo import API config
+import 'package:ungdungthuetro/api_config.dart';
+import 'package:ungdungthuetro/global.dart'; // Import biến toàn cục
 import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
 
 class Payment extends StatefulWidget {
@@ -112,43 +113,6 @@ class _PaymentState extends State<Payment> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete,
-                                  color: Colors.red.shade400),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text('Xóa sách'),
-                                    content: Text(
-                                      'Bạn có chắc muốn xóa "${book['title']}" khỏi giỏ hàng?',
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context),
-                                        child: Text('Hủy',
-                                            style: TextStyle(
-                                                color: Colors.grey.shade700)),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            purchasedBooks.removeAt(index);
-                                            _checkedItems.removeAt(index);
-                                          });
-                                          Navigator.pop(context);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red.shade400,
-                                        ),
-                                        child: Text('Xóa'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
                           ),
                         ),
                       );
@@ -195,32 +159,7 @@ class _PaymentState extends State<Payment> {
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () {
-                                final selectedBooks = purchasedBooks
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => _checkedItems[entry.key])
-                                    .map((entry) => entry.value)
-                                    .toList();
-
-                                if (selectedBooks.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Vui lòng chọn ít nhất một sách để thanh toán!'),
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Thanh toán thành công!'),
-                                      backgroundColor: Colors.green,
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
-                                }
-                              },
+                              onPressed: _processPayment,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue.shade700,
                                 padding: EdgeInsets.symmetric(
@@ -246,6 +185,43 @@ class _PaymentState extends State<Payment> {
                   ),
                 ],
               ),
+      ),
+    );
+  }
+
+  void _processPayment() {
+    List<Map<String, dynamic>> selectedBooks = [];
+
+    for (int i = 0; i < purchasedBooks.length; i++) {
+      if (_checkedItems[i]) {
+        selectedBooks.add(purchasedBooks[i]);
+      }
+    }
+
+    if (selectedBooks.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Vui lòng chọn ít nhất một sách để thanh toán!'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      // Lưu vào lịch sử mua hàng
+      boughtBooksHistory.addAll(selectedBooks);
+
+      // Xóa những sách đã mua khỏi giỏ hàng
+      purchasedBooks.removeWhere((book) => selectedBooks.contains(book));
+      _checkedItems = List.generate(purchasedBooks.length, (index) => false);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Thanh toán thành công!'),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

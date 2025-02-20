@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ungdungthuetro/Login%20and%20Register/Login.dart';
+import 'package:ungdungthuetro/global.dart';
+import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
 import 'package:ungdungthuetro/pages/Profile/Support/Boughtbook.dart';
 import 'package:ungdungthuetro/pages/Profile/Support/Favoritebook.dart';
 import 'package:ungdungthuetro/pages/Profile/Support/Notificationbook.dart';
@@ -99,7 +101,7 @@ class _ProfileState extends State<Profile> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildStatColumn('Sách đã mua', '5'),
+                      _buildStatColumn('Sách đã mua', boughtBooksHistory.length.toString()),
                       _buildStatColumn('Yêu thích', '12'),
                       _buildStatColumn('Đánh giá', '4.8'),
                     ],
@@ -111,14 +113,14 @@ class _ProfileState extends State<Profile> {
               child: ListView(
                 padding: EdgeInsets.all(16),
                 children: [
-                  // _buildMenuCard(
-                  //   icon: Icons.post_add,
-                  //   title: 'Sách đã mua',
-                  //   onTap: () => Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => Boughtbook()),
-                  //   ),
-                  // ),
+                  _buildMenuCard(
+                    icon: Icons.post_add,
+                    title: 'Sách đã mua',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Boughtbook()),
+                    ),
+                  ),
                   _buildMenuCard(
                     icon: Icons.favorite,
                     title: 'Sách yêu thích',
