@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:ungdungthuetro/api_config.dart';
+import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
 import 'package:ungdungthuetro/pages/Homepage/Bookitem.dart';
 import 'package:ungdungthuetro/pages/Homepage/genre/Horror.dart';
 import 'package:ungdungthuetro/pages/Homepage/genre/Detective.dart';
@@ -17,6 +20,32 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<dynamic> books = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDiscountedBooks();
+  }
+
+  Future<void> fetchDiscountedBooks() async {
+    final url =
+        "${ApiConfig.baseUrl}/giamgia"; // Ví dụ: http://localhost:3000/giamgia
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          books = data;
+        });
+      } else {
+        // Xử lý lỗi nếu không lấy được dữ liệu
+        print("Lỗi khi tải sách giảm giá: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Lỗi: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +112,7 @@ class _HomeState extends State<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Sách nổi bật',
+                      'Sách Giảm giá',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -91,24 +120,39 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    Expanded(
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 0.7,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                        ),
-                        itemCount: 9,
-                        itemBuilder: (context, index) {
-                          return BookItem(
-                            title: books[index]['title'], // Lấy tiêu đề sách
-                            imageUrl: "${ApiConfig.baseUrl}" + books[index]['thumbnail'], // Lấy ảnh sách
-                          );
-                        },
-                      ),
-                    ),
+                    // Nếu books rỗng, hiển thị progress indicator hoặc thông báo không có dữ liệu
+                    books.isEmpty
+                        ? Center(child: CircularProgressIndicator())
+                        : Expanded(
+                            child: GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio: 0.7,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                              ),
+                              itemCount: books.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            BookDetail(book: books[index]),
+                                      ),
+                                    );
+                                  },
+                                  child: BookItem(
+                                    title: books[index]['title'],
+                                    imageUrl: "${ApiConfig.baseUrl}" +
+                                        books[index]['thumbnail'],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                   ],
                 ),
               ),

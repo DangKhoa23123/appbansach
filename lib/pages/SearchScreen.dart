@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ungdungthuetro/api_config.dart';
+import 'package:ungdungthuetro/pages/Book/BookDetail.dart';
 import 'package:ungdungthuetro/pages/Homepage/Bookitem.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _SearchScreenState extends State<SearchScreen> {
       isLoading = true;
     });
 
-    // Sử dụng query parameter "title" cho API của bạn
+    // Sử dụng query parameter "q" cho API của bạn
     final url = Uri.parse("${ApiConfig.baseUrl}/search?q=$query");
     
     try {
@@ -73,9 +74,19 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   itemCount: searchResults.length,
                   itemBuilder: (context, index) {
-                    return BookItem(
-                      title: searchResults[index]['title'],
-                      imageUrl: "${ApiConfig.baseUrl}" + searchResults[index]['thumbnail'],
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookDetail(book: searchResults[index]),
+                          ),
+                        );
+                      },
+                      child: BookItem(
+                        title: searchResults[index]['title'],
+                        imageUrl: "${ApiConfig.baseUrl}" + searchResults[index]['thumbnail'],
+                      ),
                     );
                   },
                 ),
